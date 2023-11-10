@@ -1,4 +1,4 @@
-Riste Popov
+# Riste Popov
 # Date : 19 octobre 2023
 #
 # Programme qui génère un labyrinthe
