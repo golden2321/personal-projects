@@ -1,1 +1,1 @@
-This folder includes python projects.
+This program can generate a maze with an entry point at the  top left corner and an exit bottom right corner. You can choose dimensions of the maze at the end of the program when running the main function laby(largeur, hauteur, dimension). Comments are in French.
