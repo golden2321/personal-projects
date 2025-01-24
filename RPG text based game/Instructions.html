@@ -1,0 +1,709 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>TP1: Système de combat RPG (IFT1025B - H24)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="3dc37660-127b-407b-8746-453f80e9f8e4" class="page sans"><header><h1 class="page-title">TP1: Système de combat RPG (IFT1025B - H24)</h1><p class="page-description"></p></header><div class="page-body"><hr id="e8c4538e-d0f2-4f12-be16-50789edd1161"/><p id="c12c5da5-b827-4d81-aee1-ce3f24f569ec" class="">Ce projet est à faire seul ou en équipe de deux. Aucune équipe de 3 ne sera tolérée pour ce projet. Si lors de la remise il y a trois noms inscrits et que nous n’y étions pas au courant, vous serez pénalisés sur votre note finale.</p><h1 id="e32b5056-f387-4ef8-a5d7-3805bc7f7f8a" class="">Mise en situation</h1><hr id="de6c7c38-f13d-4c35-9627-369e257de177"/><p id="27aaa6c3-dffc-41c1-9e6c-0d2808068554" class="">Vous développez un système de combat simple de jeu de rôle (RPG) textuel. Vous créez votre héros, qui peut avoir 3 classes différentes, et lui ferez traverser une quête qui sera décrite en une simple phrase. Il va combattre plusieurs ennemis à la suite, se reposer, se soigner et s’entraîner. À vous d’implémenter ce système pour donner vie au roleplay !</p><h1 id="91258b42-8774-48d8-b247-2955bd3ad689" class=""><strong>Les instructions</strong></h1><hr id="e4373efd-8c8e-4518-8ef8-98f62971928b"/><p id="f8e3060c-fe3c-4a4c-9813-90da9c37fe91" class="">Avant tout, tâchez d’utiliser des <code>int</code> mais pas des <code>double</code> pour vos entiers. On fera en sorte que nos tests ne causent pas délibérément des <em>parseIntError </em>avec des chiffres trop grands.</p><p id="2ad4ca36-a8ce-4e3d-a112-9f3e41e4cc02" class="">
+</p><ol type="1" id="c4fbf1af-2a7f-461c-9b6a-e5480b477ba0" class="numbered-list" start="1"><li> <span style="border-bottom:0.05em solid">Conception des personnages :</span></li></ol><p id="e754c0f5-7a41-4369-95a2-38e45565e6c2" class="">Vous devez commencer par concevoir et implémenter les classes des différents types de personnages. Vous pouvez les implémenter comme vous voulez tant que la spécification est respectée, mais on exige de voir :</p><ul id="d4e1968e-a009-4daf-9d39-74d3e7a11ef2" class="bulleted-list"><li style="list-style-type:disc"><strong><code>Enemy</code></strong><strong> </strong>: La classe représentant les ennemis que le héros combat. </li></ul><ul id="3bdb8b7d-32c6-42bb-b118-b9b1962b03f8" class="bulleted-list"><li style="list-style-type:disc"><code><strong>Hero</strong></code> : La classe représentant le héros.</li></ul><p id="3208b00f-64d5-423a-bbef-bb9d1c9cae90" class=""><div class="indented"><p id="ccaa1153-f2f5-44b0-87fc-06eecb53e6e6" class="">Il y a 3 types de héros :</p><ul id="c01f827f-626a-4173-88b2-46dda67405b4" class="bulleted-list"><li style="list-style-type:disc">Type attaque : lorsqu&#x27;il attaque, les dégâts qu&#x27;il inflige sont 2 fois ses points d&#x27;attaque normaux, mais il reçoit 2 fois les dégâts que l&#x27;ennemi inflige.</li></ul><ul id="07e1a0e3-3507-4c53-9ab6-f7240c5372e3" class="bulleted-list"><li style="list-style-type:disc">Type defense : Il ne reçoit que la moitié des dégâts que l&#x27;ennemi inflige, mais il n&#x27;inflige que la moitié de ses points d&#x27;attaque quand il frappe l&#x27;ennemi.</li></ul><ul id="2b31ba10-144d-48ac-b4a4-0e7f655a03ce" class="bulleted-list"><li style="list-style-type:disc">Type équilibre : Rien ne change.</li></ul><p id="fc52974b-bc48-4a5e-accf-36c8880940e6" class="">
+</p><p id="c0526673-6e42-49af-bbd4-4947638fc0ac" class=""><em>(Indice : L’héritage participe à la beauté du code en évitant les répétitions, donc n’hésitez pas!)</em></p><p id="7a0b63dc-388d-415a-a498-b3dfd7d103a3" class="">
+</p><p id="fb5b8923-0713-4e18-8ead-1072845b0043" class="">Dans la phrase en input, le héros est de type Attaque quand son nom commence par A, il est de type Défense quand son nom commence par D, et il est de type Équilibre quand son nom commence par n&#x27;importe quoi d&#x27;autre.</p><p id="ea26fcae-c32c-4456-877e-704a8e97242e" class="">
+</p></div></p><ol type="1" id="9b841cb8-967e-4efb-9097-784e3e3cb16d" class="numbered-list" start="2"><li><span style="border-bottom:0.05em solid">Système d&#x27;expérience et de mise à niveau :</span></li></ol><p id="5e4e47a0-e165-498b-9c31-8c8ae78d0e08" class="">Pour mettre en œuvre l’expérience et le système de mise à niveau du héros, les exigences sont que :</p><ul id="c158b90f-4aee-4655-8f0a-6fc4ccfd8a04" class="bulleted-list"><li style="list-style-type:disc">Le héros possède des attributs de santé et santé maximale (int<strong> health</strong>, <strong>maxHealth</strong>), de niveau (int <strong>level</strong>) et de points d&#x27;expérience (int <strong>experience</strong>).</li></ul><ul id="d3c11964-78df-4bea-bea2-dc73c3099001" class="bulleted-list"><li style="list-style-type:disc">Le héros peut essayer de s&#x27;améliorer après avoir acquis de l&#x27;expérience, et les règles de mise à niveau doivent être calculées en fonction des points d&#x27;expérience. À mesure que vous montez de niveau, la santé maximale et les dégâts d&#x27;attaque de votre héros augmentent.</li></ul><p id="b6d613b7-beb0-4d3d-9f6f-88ffce4833ea" class=""><div class="indented"><p id="6ec08896-03c3-4300-ae93-410eae1b0e19" class="">Le héros gagne des points d&#x27;expérience à chaque fois qu&#x27;il bat un ennemi. Quand il en accumule assez, il augmente de niveau et améliore ses stats, puis ses points d&#x27;expérience reviennent à 0 jusqu&#x27;au prochain level up, où là :</p><ul id="f0804eba-2276-46b2-9c8f-e123b969a9aa" class="bulleted-list"><li style="list-style-type:disc">Ses points de vie maximum augmentent de 12 (de plus, tous ses points de vie sont régénérés)</li></ul><ul id="debf8085-7e65-44d3-acd3-7d8fb006ed15" class="bulleted-list"><li style="list-style-type:disc">Ses points d&#x27;attaque augmentent de 6</li></ul><p id="2e3136f2-b895-4f51-933a-9bb1116294ac" class="">
+</p><p id="75584e10-53d9-4489-b594-d09d7eaa027f" class="">Aussi, le héros peut atteindre un niveau maximum de 99. Donc tout point d’expérience gagné au-delà ne sert à rien.</p><p id="8e7f9bb5-f18d-4328-9fd1-7f721faef4ca" class="">La formule pour avoir le nombre de points d&#x27;expérience requis pour atteindre un niveau est :</p><p id="fa2fbe7d-4833-4e80-8a24-41632bacbefd" class=""><strong>exp_requis = 50 + niveau_voulu * 20 * (1.1^niveau_voulu)</strong></p><p id="99755f3c-19fe-483c-bc40-d1c2b73059d3" class="">Le héros commence au niveau 1 et a 0 points d&#x27;expérience. Ainsi, par exemple, atteindre le niveau 2 nécessite <strong>50 + </strong><strong><em>2 </em></strong><strong>* 20 * (1.1 ** </strong><strong><em>2</em></strong><strong>) = 98.4</strong>, donc 99 points d&#x27;expérience (les points d’expérience sont un nombre entier donc on prend l’entier supérieur).</p><p id="c2645501-b77a-4b1e-9232-1e87b3993e93" class="">
+</p></div></p><ul id="f07885da-0fd8-4f41-bc6d-00e5c7db5c15" class="bulleted-list"><li style="list-style-type:disc">Cependant, à chaque fois qu&#x27;il bat un ennemi, les ennemis suivants gagnent en force aussi :<ul id="dd3c4775-835a-43b7-9b1e-af3bdd1c6e27" class="bulleted-list"><li style="list-style-type:circle">Leurs points de vie initiaux augmentent de 10</li></ul><ul id="364e2bca-84c4-420e-b706-c302b5dc045f" class="bulleted-list"><li style="list-style-type:circle">Leurs points d&#x27;attaque augmentent de 5</li></ul><ul id="04fbe0df-7fd0-43aa-9ffd-1de1b440f12d" class="bulleted-list"><li style="list-style-type:circle">Les points d&#x27;expérience qu&#x27;ils donnent augmentent de 8</li></ul><p id="f56be9ac-cdb2-49c0-a925-aa6e99a63b32" class="">Ainsi, initialement, le tout premier ennemi que le héros combat a <em>100 </em>points de vie, <em>25 </em>points d&#x27;attaque, et donne <em>35 </em>points d&#x27;expérience, tandis que le deuxième (si le héros survit au premier) aura <em>110</em> points de vie, <em>30 </em>points d’attaque, et donnera <em>43</em> points d’expérience.<br/><br/></p><p id="e6c0812c-deca-453c-b4cd-1dc2fd935fbe" class="">
+</p></li></ul><ol type="1" id="db5c2b9b-7947-4a87-be3a-b818d65e3581" class="numbered-list" start="3"><li><span style="border-bottom:0.05em solid">Système de combat :</span></li></ol><p id="954724d5-b661-40f7-9eb5-c5a7da625bc2" class="">Un combat se déroule de manière très simple : le héros inflige des dégâts à l&#x27;ennemi, puis l&#x27;ennemi inflige des dégâts au héros, et ainsi de suite jusqu&#x27;à ce que l&#x27;un d&#x27;entre eux meurt. Le héros frappe toujours en premier. Le héros ne récupère pas automatiquement ses points de vie après un combat, donc s’il combat trop d’ennemis à la suite, il peut mourir, donc échouer sa quête.</p><h1 id="c9ce66c0-0436-4b1e-a2fd-d4501027f713" class=""><strong>Aperçu</strong></h1><hr id="69af512a-56d7-47d3-908f-b03c433eec74"/><p id="2e8b296a-d221-4fcd-b370-45b68adfbcb6" class="">Pour lancer le programme, il faut d&#x27;abord aller au dossier source du fichier <code>Main</code>, puis faire :</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="fa6e40da-61e9-4947-b3c2-05319c380f12" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">javac Main.java
+java Main &quot;la phrase&quot;</code></pre><p id="eafe9c65-2f77-4ddf-ab52-be6e3f51c8f0" class="">La phrase qui décrit la quête du héros sera ainsi mise en argument comme ci-dessus.</p><p id="9f3383d1-0647-449b-86fe-0fc9838bf32a" class="">
+</p><p id="dbcd94a6-2df5-4717-aaaa-49d5225a431f" class="">La phrase doit être obligatoirement sous la forme :<br/>&quot;[nom du perso <br/><strong>(String)</strong>],[points de vie <strong>(nombre entier)</strong>],[points d&#x27;attaque <strong>(nombre entier)</strong>], [action],[action], [action], [action], ...&quot;</p><p id="adc8ef14-bec8-43ff-89e2-62ec121c3fd1" class=""><br/>Les 3 premiers mots de la phrase désignent le nom du héros, ses points de vie initiaux et ses points d&#x27;attaque initiaux.<br/></p><p id="14d83860-6c3d-48ab-b08a-7c52779c43ca" class="">
+</p><p id="a41447df-05e0-4465-881d-b7de8bbcf23a" class="">Ensuite, chaque action est un String qui ne peut que prendre l&#x27;une des 4 formes suivantes :</p><ul id="4231caf5-9957-4f2b-a942-227b6e8a4e66" class="bulleted-list"><li style="list-style-type:disc">&quot;<strong>fought </strong><em>n </em>enemies&quot;, n étant un nombre entier donnant le nombre d&#x27;ennemis que le héros combat à la suite sans se soigner</li></ul><ul id="058fdcc8-b304-436c-92a0-be2c7932e99e" class="bulleted-list"><li style="list-style-type:disc">&quot;<strong>rested</strong>&quot; pour indiquer lorsque le héros se repose et soigne tous ses points de vie</li></ul><ul id="23d52a7b-54cf-4d5a-9c2c-e61f4b5b084f" class="bulleted-list"><li style="list-style-type:disc">&quot;<strong>healed </strong><em>n </em>health points&quot; n étant un nombre entier donnant le nombre de points de vie que le héros soigne (la vie du héros ne peut pas dépasser ses points de vie maximum)</li></ul><ul id="05884db0-ac3f-4225-8f32-6ea6c0caeb1c" class="bulleted-list"><li style="list-style-type:disc">&quot;<strong>trained </strong>to get <em>n </em>attack points&quot; n étant un nombre entier donnant le nombre de points d&#x27;attaque que le héros gagne en s&#x27;étant entraîné</li></ul><p id="e5aeb634-3ca7-4ead-a0a2-ce798a793330" class="">
+</p><p id="9ad3ae9a-c280-4cb4-bf51-142c6b51e9ff" class="">L&#x27;objectif du programme sera de faire exécuter la quête au héros, puis imprimer l&#x27;issue de la quête à la fin, dans laquelle on donne le nombre d&#x27;ennemis tués par le héros, le niveau qu&#x27;il a atteint et ses points de vie restants s&#x27;il a survécu. Le message sera imprimé différemment dépendamment de s&#x27;il est mort pendant la quête ou s&#x27;il a survécu à la fin.</p><p id="59a68b67-e0bd-47de-a620-4e358a20daf0" class="">
+</p><p id="32ff7b81-bff1-4c53-a4ed-e9c8cee922e8" class="">Dans le dossier <code>Classes</code> fourni, vous avez la classe <code>ArgsProcessor</code> dans laquelle vous compléterez les <em>TODOs</em> pour faire fonctionner le programme, la classe <code>Hero</code> que vous allez compléter et qui est obligatoire pour faire marcher la fonction <em>doAction</em> dans ArgsProcessor, et la classe <code>Main</code> qui se contente d’exécuter la fonction <em>process</em> de ArgsProcessor avec les arguments donnés en ligne de commande.</p><p id="7ff1a836-6a47-43ab-aabd-589663d512be" class="">
+</p><h2 id="4f01be15-b0e6-47a9-8ecc-094dc66077db" class=""><span style="border-bottom:0.05em solid">Exemple:</span></h2><p id="3df24193-7181-434e-9b58-a5fc52bb69ce" class="">Ainsi, voici 2 exemples d&#x27;exécution :</p><p id="5702ad17-131e-41ef-bdea-21d73b83113c" class=""><strong>exemple 1</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="246161b7-a149-494a-832a-e24ff2ae5003" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">Input:
+
+java Main &quot;Kevin,150,20, fought 1 enemy, rested, trained to get 30 attack
+points, fought 2 enemies&quot;
+
+Output:
+
+In his quest, Kevin beat 3 enemies, attained level 2 and survived with 162
+HP!</code></pre><p id="7ae43e6e-bce4-4316-91d8-b15da3ae8720" class=""><strong>exemple 2</strong></p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="9d5e861f-262b-4211-b822-5682754a455b" class="code"><code class="language-Java" style="white-space:pre-wrap;word-break:break-all">Input:
+
+java Main &quot;Kevin,150,20, fought 65 enemies&quot;
+
+Output:
+
+In his quest, Kevin died after beating 1 enemies and attaining level 1!</code></pre><p id="1e23b689-e68e-4ffb-b40f-d42e824f385a" class="">
+</p><p id="6afe6295-31e2-40b6-b871-a4ba75695e0a" class="">Pour tous les tests, assumez que la phrase mise en argument suit toujours parfaitement le format exigé. Un fichier texte contenant d’autres phrases exemples et l’output attendu sera ajouté sur StudiUM pour complémenter ces exemples.</p><p id="a59729c4-46ef-4e65-9234-9b4a28335a54" class=""> Bon courage et bon codage !</p><h1 id="9a5cf985-a553-4b7e-9af8-d9643fcceb1a" class="">Plagiat</h1><hr id="54dadd76-2230-4278-8a1d-c0fc99e5249f"/><p id="a15dbf70-de3f-480f-b5dd-49fd7aff0efa" class="">Sachez que le plagiat entraine directement la note de <strong>0</strong> et mène à une <strong>note dans votre dossier</strong>. Tout partage de code ou copie de code qui n’est pas le vôtre, qu’il soit sous forme de texte, de photo ou tout autre format, est considéré comme du plagiat. Lors de la correction, nous allons utiliser plusieurs méthodes pour détecter le plagiat. Ne vous essayez pas, les conséquences seront sévères.</p><p id="3abbd4b1-9d67-40ca-af20-26ceb28ed796" class="">Vous pouvez consulter <a href="https://integrite.umontreal.ca/accueil/">le site de l’université</a> pour plus d’informations</p><p id="732fe078-66b2-45af-a888-f20be3a93613" class="">
+</p><h2 id="cbe7840e-730e-4f35-8f68-a97625595b44" class="">Remise</h2><hr id="0cced787-7d45-4d4a-a0de-bcfd6b1f7aaa"/><p id="2a3b687f-d022-4ddb-b398-b033652c6bbf" class="">Remettez tout votre code dans le même dossier sous format compressé .zip avec les noms des membres de l’équipe en camelCase avec une majuscule au début comme ceci : <code>TP1_PrenomNom1_PrenomNom2.zip</code> (où PrenomNom1 est votre nom ex: <em>MathisLaroche</em> et PrenomNom2 est celui de votre coéquipier.ère ex: <em>Enric Soldevila</em>). Remettez-le tout sur studium sous le devoir qui est affiché.</p><p id="63d33800-74f9-4598-b41c-ec7926ceff1f" class="">Pour compresser le fichier:</p><ul id="305b708d-edc8-4a4a-9e1e-923b23bbed19" class="bulleted-list"><li style="list-style-type:disc">MacOS: vous devriez avoir le bouton compresser lorsques vous sélectionnez les fichiers à compresser (<a href="https://support.apple.com/en-mz/guide/mac-help/mchlp2528/mac">https://support.apple.com/en-mz/guide/mac-help/mchlp2528/mac</a>).</li></ul><ul id="2b4ad0b9-fbeb-4a2c-8cd0-fa3ba474c2be" class="bulleted-list"><li style="list-style-type:disc">Windows: je recommande WinRAR qui est un logiciel gratuit très répandu (<a href="https://www.win-rar.com/start.html?&amp;L=10">https://www.win-rar.com/start.html?&amp;L=10</a> oui leur site fait vieux, mais il s’agit du bon site).</li></ul><p id="2b97a577-37f5-4f53-afb8-50723d138845" class="">Si vous avez des questions sur des instructions du devoir, n’hésitez pas à les poser sur le forum ! Il est possible qu’on fasse des modifications à l’énoncé pour clarifier les consignes, nous vous le ferons savoir si c’est le cas.</p><p id="c247eaa1-d824-438a-b243-2654e440a6df" class="">
+</p><h1 id="902ed457-657c-4590-b63f-7bb0c3fb5391" class="">Correction</h1><hr id="992143ab-5b6a-41af-a2a0-a0bab9887e0c"/><p id="1fa5c086-754d-4b33-bee5-c21e454f9b09" class="">Les exercices sont à faire en équipe de <strong>2</strong>. Pour vous évaluer, nous allons nous fier à ces critères de correction :</p><ul id="46d0412d-3f07-4434-9b97-62451b36394f" class="bulleted-list"><li style="list-style-type:disc">55% <strong>Fonctionnement du code</strong> Votre code va être testé avec plusieurs valeurs d’entrée. Si certaines réponses ne sont pas valides, vous allez perdre des points. En revanche, si votre code fonctionne à merveille, vous allez avoir tous vos points ! Je vous conseille de bien tester votre programme.</li></ul><ul id="e98027ab-906c-4af2-921c-12f6cb918e7a" class="bulleted-list"><li style="list-style-type:disc">10% <strong>Compilation :</strong> Votre programme arrive-t-il à passer la compilation ? Vous devez vous assurer que le code qu&#x27;on vous passe fonctionne avec le reste de votre programme tout restant inchangé. En effet, le squelette du programme qu&#x27;on vous fournit est sur quoi devra se baser le reste de votre code.</li></ul><ul id="22343f22-0ceb-4ac9-8f40-7c51bf60c037" class="bulleted-list"><li style="list-style-type:disc">35% <strong>Qualité du code :</strong> Plus votre code est simple et facile à lire, plus vous allez avoir de points ! Voici des éléments qui contribuent à la beauté d’un code :<ul id="5cba5ada-b212-425e-8751-2b98ef13782c" class="bulleted-list"><li style="list-style-type:circle">Est-ce que vos noms de variable sont descriptifs de leur utilisation ?</li></ul><ul id="2bb0725a-bba9-45a3-99fc-599c81cbbe5e" class="bulleted-list"><li style="list-style-type:circle">Est-ce que vous aérez vos expressions (par exemple, mettre des espaces avant et après un <code>=</code>) ?</li></ul><ul id="7b1ed602-0916-40e5-86a0-ca4723778609" class="bulleted-list"><li style="list-style-type:circle">Utilisez-vous des variables inutiles ? Évitez-vous la répétition de code ?</li></ul><ul id="dae29afb-e8a5-43df-9a72-f925d9cf8f9a" class="bulleted-list"><li style="list-style-type:circle">Est-ce que votre code est concis et bien commenté ?</li></ul><ul id="0c6f9fb3-1d5f-449e-83c7-0a515ab78601" class="bulleted-list"><li style="list-style-type:circle">Est-ce que votre code respecte bien les principes de la programmation orientée objet ?</li></ul></li></ul><p id="2c16b7ea-d052-4408-9160-74de4b6b7e2e" class=""><div class="indented"><p id="1d0d8494-1a03-422b-917c-8f8e4d8b28f7" class="">                      Le travail doit être remis le 18 Février à minuit (11:59 pm) au plus tard!</p><p id="03692c90-33cd-4800-92de-7da589802b80" class="">
+</p><p id="76c973da-34eb-4565-926e-06dbf8117d7b" class="">
+</p></div></p><p id="42a5b275-7d34-41e3-97a7-813409570861" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
