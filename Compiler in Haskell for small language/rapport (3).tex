@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{TP2 IFT2035}
+\author{Riste Popov}
+\date{18 Juin 2024}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problèmes rencontrés:}
+\begin{enumerate}
+    \item On a passé beaucoup de temps à essayer de comprendre le code déjà fourni avant de pouvoir le modifier et l’adapter au TP2. Par exemple, il était dur de comprendre comment la fonction scons2l marche puisqu’elle utilise la récursion et il faut faire plusieurs tests pour voir quelles sont toutes les possibilités selon les différents Sexp que s2l peut reçevoir. Par exemple, si s2l reçoit un Sexp qui contient un Lproc avec deux variables, il y aura une récursion pour défaire le currying. Après avoir compris ça, on a pu modifier la partie gérant le “proc” pour qu’il retourne un Lexp où le Lproc a comme deuxième argument une liste de Lexp au lieu d’un seul Lexp. 
+
+    
+    \item  La partie du “proc” dans s2l été difficile à résoudre puisqu’au début on avait une seule instruction alors que là on en avait plusieurs à faire et le code donné ne pouvait que reconnaître le cas où il y avait une seule instruction. Pour le faire on a pris la séquence d’instructions comme une liste on a appliqué s2l dessus. On a aussi dû créer une autre fonction scons2lProc pour le cas où on a un proc qui utilise le currying. Sans celle-ci, on aurait une liste sur une autre liste ce qui n’aurait pas respecté la syntaxe de Lexp. On devait mettre des crochets autour du body dans cette partie “Lproc (s2v sarg) [body]” mais seulement si il y avait deux ou plus variable en argument dans le proc.
+    
+    
+     \item  La partie du “def” dans s2l a aussi été dure car non seulement def pouvait avoir multiples instructions, mais les définitions dans def pouvait aussi avoir multiples instructions. On devait penser à où se trouvaient les instructions et comment séparer les Scons imbriqués afin de les transformer sous la forme (Var, Lexp) et de les rajouter à l’environnement de def. Pour les expressions de def c’était assez simple, il fallait faire le pattern matching où à la fin il y avait une liste de Sexp et on pouvait map s2l dessus. Pour les définitions de variables et de fonctions de def, là on avait plus de difficulté. La fonction s2d ne faisait que le pattern matching pour “(Scons (Scons Snil sd) se)” alors que dans notre cas avec plusieurs instructions, il peut y avoir 3 Scons ou plus ce qui aurait donné l’erreur de "Definitions invalides: ". Alors, on a dû modifier le s2d et créer des fonctions auxiliaires  qui peuvent gérer 3 scons ou plus. 
+
+     \item On a essayé le Lcase mais on a pas réussi à le faire marcher pour tout les cas. On n'a pas réussi à gérer quand il y a des séquences d'instructions. Aussi, certains cas imbriqués de def tel que l'example fournie du prof avec even et odd ne fonctionne pas mais on est pas sur pourquoi.
+
+
+
+\end{enumerate}
+
+\section*{Surprises:}
+\begin{enumerate}
+    \item On a été surpris par le temps que ça prend pour comprendre le code donné avant de pouvoir le modifier. On a dû d'abord tester comment il marche pour le tp1 et trouver où exactement il y a des erreurs de type et pour quel cas de input spécifique. 
+
+    \item Du au temps que ça prend pour faire chacune des fonctions, on a pas eu le temps de faire case dans s2l mais on la fait dans eval. Si on avait plus de temps, on aurait pu finir le case. En effet, ça prenait environ 2-3 jours pour faire chacune des fonctions comme proc et def. 
+    
+\end{enumerate}
+
+\section*{Choix qu’on a du faire:}
+\begin{enumerate}
+    \item On a dû créer une fonction s3d pour le def dans s2l puisque s2d ne pouvait pas gérer par lui même quand on avait des définitions ayant une séquence d’instructions. s3d prend un Sexp et une liste de Lexp. La liste de Lexp sert à stocker les possibles multiples instructions de chacune des défintions. Lorsque s2d appelle s3d pour la première fois, il lui passe comme argument ce que s3d doit évaluer ainsi qu’une liste vide. Cela est nécessaire puisque s3d va travailler avec cette liste vide pour la remplir des instructions de la définition. s3d pouvait gérer les expressions qui commençaient par plus que 2 scons ce que s2d ne pouvait pas faire. Cependant, il y avait encore une erreur de type quand loop s'appelait récursivement, body était une liste de Lexp dans la première itération et dans la deuxième il était un Lexp simple. Alors, on n'avait pas le choix de créer une deuxième fonction auxiliaire s3dLprocExt qui sert qu' après la première itération, body soit un Lexp au lieu d’une liste de Lexp. Cela a permis d’éliminer toutes les erreurs de types liés à def dans s2l.
+
+    \item Pour le eval, on a dû créer une fonction auxiliaire procWithSideEffects afin de gérer quand on a plusieurs expressions à évaluer dans Lproc. En effet, on sait qu’on doit évaluer chacune des expressions et retourner seulement la dernière.  Si les expressions avant la dernière n’ont pas d’effet de bord elles ne servent à rien mais on les évalue tout de même au cas où il y a un effet de bord. Donc, dans la gestion de Ldo dans eval, on appelle procWithSideEffects sur la liste de Lexp d’un Lproc, alors que dans le Tp1 on avait pas besoin de cette fonction auxiliaire puisque qu’il n’y avait qu’une seule instruction et on pouvait directement l’évaluer et retourner la valeur. 
+    
+\end{enumerate}
+
+\section*{Options qu’on a sciemment rejeté:}
+\begin{enumerate}
+    \item On a rejeté l'option d'essayer de tout faire en modifiant le code déja donné du prof. En effet, au début on pensait qu'on aurait tout pu faire en faisant quelques petites modifications au code déjà donné et que ça aurait marché. On avait tort. Il était très difficile, voir impossible, de tout faire sans diviser en fonctions auxiliaires. Cela nous a aider à séparer les étapes pour que ce soit plus clair, par exemple dans la partie du s2l de def on sait chaque fonction sert à quoi et le processus est bien séparé au lieu d'être coincé dans une seule fonction, ce qui aurait été dur à suivre. 
+    
+    
+\end{enumerate}
+
+\section*{Test unitaire}
+\begin{enumerate}
+    \item On a fait des tests qui marchent pour chacun des mots clés tel que def, proc, case, node,ou seq. On les a aussi combinés pour couvrir toutes les possibilités. Ça ne marche pas pour toutes les possibilité pour case puisqu'on ne la pas entièrement complété.  Cependant les autres combinaisions qu'on peut faire ,comme imbriquer un proc dans un def, marche.
+    
+\end{enumerate}
+
+
+\end{document}
+
