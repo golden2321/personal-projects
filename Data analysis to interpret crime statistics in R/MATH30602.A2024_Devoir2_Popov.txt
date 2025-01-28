@@ -1,0 +1,165 @@
+#Riste Popov
+
+#Partie 1
+
+#Q1
+setwd("C:/school files/udem/HEC_SAS_R/devoir2")
+
+actCriminel = read.csv("actes-criminels.csv",header = T, sep = ",")
+
+install.packages("readxl")
+library(readxl)
+pdqDesc = read_excel("C:/school files/udem/HEC_SAS_R/devoir2/pdq_description.xlsx")
+
+#Q2
+merged = merge(x=actCriminel, y=pdqDesc,by.x = "PDQ",by.y = "code_PDQ", all.x = TRUE)
+
+
+#Q3
+
+#a
+mergedSansDescription = merged[is.na(merged$Description),]
+
+#b
+number_of_rows <- nrow(mergedSansDescription)
+# Cela représente 9380 lignes
+
+#c
+mergedSDRem = merged[!is.na(merged$Description),]
+
+#d
+colonnePDQ <- factor(merged$PDQ)
+summary_PDQ <- summary(colonnePDQ)
+summary_dataframe <- data.frame(summary_PDQ)
+summary_dataframe <- data.frame(
+  Category = names(summary_PDQ),  
+  Count = as.numeric(summary_PDQ) 
+)
+sortedSummary <- summary_dataframe[order(summary_dataframe$Count),]
+# Le PDQ qui a le plus de crimes est le PDQ 38 avec 22160 crimes et celui
+# avec le moins de crimes est le PDQ 55 avec 151 crimes.
+
+#Q4
+list_desc <- list()
+
+for (desc in unique(mergedSDRem$Description)) {
+  
+  filtered_data <- mergedSDRem[mergedSDRem$Description == desc, ]
+  list_desc[[desc]] <- filtered_data
+}
+
+#Q5
+split_df_to_list = function(entry_df, split_var,selected_var = NULL){
+  
+  if (!is.null(selected_var)) {
+    entry_df <- entry_df[,c(split_var,selected_var)]
+  }
+  
+  list_output <- list()
+  for (svar in unique(entry_df[[split_var]])) {
+    
+    filtered_data <- entry_df[entry_df[[split_var]] == svar, ]
+    list_output[[svar]] <- filtered_data
+  }
+  return(list_output)
+}
+
+#Q6
+
+resTestFunc = split_df_to_list(merged,"CATEGORIE", c("LONGITUDE", "LATITUDE","DATE","QUART"))
+
+#Partie 2
+
+#Q1
+get_circle_points <- function(center_long,
+                              center_lat,
+                              radius_in_km,
+                              nb_of_points){
+
+    radiusLon = 1 / (111.319 * cos(center_lat * (pi / 180))) * radius_in_km
+  radiusLat = 1 / 110.574 * radius_in_km
+  
+  dTheta = 2 * pi / nb_of_points
+  theta = 0
+  # Un data.frame vide dans lequel on va stocker le résultat au fur et à mesure des itérations de la boucle for
+  points_on_circle =data.frame()
+  
+  for (i in 1:nb_of_points){
+    # Contanez les résultats correctement
+    points_on_circle <- rbind(points_on_circle,
+                            c(center_long + radiusLon * cos(theta),
+                                center_lat + radiusLat * sin(theta)
+                            ))
+    theta = theta + dTheta
+  }
+  points_on_circle <- data.frame(points_on_circle)
+  #Ajustez le nom des colonnes du dataframe de sortie
+  colnames(points_on_circle) <- c('LONGITUDE', 'LATITUDE')
+  
+  points_on_circle$geographical_quarter <- 'West - South'
+  points_on_circle$geographical_quarter[points_on_circle$LATITUDE >= center_lat & points_on_circle$LONGITUDE
+                                        <= center_long] <- 'West - North'
+  points_on_circle$geographical_quarter[points_on_circle$LATITUDE >= center_lat & points_on_circle$LONGITUDE >
+                                          center_long] <- 'East - North'
+  # En vous inspirant de ce qui est fait dans les 2 lignes au dessus, écrivez la dernière condition
+  points_on_circle$geographical_quarter[points_on_circle$LATITUDE <= center_lat & points_on_circle$LONGITUDE >=
+                                          center_long] <- 'East - South'
+  # Ajoutez le point central défini en paramètre d’entrée
+  points_on_circle = rbind(points_on_circle, c(center_long, center_lat, 'Center'))
+  # Ajustez les formats à numérique
+  points_on_circle$LONGITUDE <- as.numeric(points_on_circle$LONGITUDE)
+  points_on_circle$LATITUDE <- as.numeric(points_on_circle$LATITUDE)
+  # On veut retournez le dataframe que l’on a construit dans la fonction
+  return(points_on_circle)
+} 
+
+#Q2
+test1km <- get_circle_points(-73.6212999,  45.4983503, 1, 100)
+colors <- c('West - South' = 'red', 'West - North' = 'green', 'East - North' = 'blue', 'East - South' = 'yellow', 'Center' = 'black')
+
+plot(test1km$LONGITUDE, test1km$LATITUDE , col = as.factor(colors[test1km$geographical_quarter]))
+
+#Q3
+min_longitude <- min(test1km$LONGITUDE)
+max_longitude <- max(test1km$LONGITUDE)
+min_latitude <- min(test1km$LATITUDE)
+max_latitude <- max(test1km$LATITUDE)
+filtered_crimes <- subset(merged, LONGITUDE >= min_longitude & LONGITUDE <= max_longitude & LATITUDE >= min_latitude & LATITUDE <= max_latitude)
+
+
+#Q4
+in_the_cercle_v2 <- function(rowdf, circle_point){
+
+  res <- all(c(any(circle_point[circle_point$geographical_quarter == 'West - South',c('LONGITUDE')]<=
+                     as.numeric(rowdf[['LONGITUDE']]) & circle_point[circle_point$geographical_quarter == 'West - South',c('LATITUDE')]<
+                     as.numeric(rowdf[['LATITUDE']])),
+               any(circle_point[circle_point$geographical_quarter == 'West - North',c('LONGITUDE')]<= as.numeric(rowdf[['LONGITUDE']])
+                   & circle_point[circle_point$geographical_quarter == 'West - North',c('LATITUDE')]> as.numeric(rowdf[['LATITUDE']])),
+               any(circle_point[circle_point$geographical_quarter == 'East - North',c('LONGITUDE')]>= as.numeric(rowdf[['LONGITUDE']])
+                   & circle_point[circle_point$geographical_quarter == 'East - North',c('LATITUDE')]> as.numeric(rowdf[['LATITUDE']])),
+               any(circle_point[circle_point$geographical_quarter == 'East - South',c('LONGITUDE')]>= as.numeric(rowdf[['LONGITUDE']])
+                   & circle_point[circle_point$geographical_quarter == 'East - South',c('LATITUDE')]< as.numeric(rowdf[['LATITUDE']]))
+  ))
+  return(res)
+}
+
+
+#Q5
+merge_all <-function(data_center_long, data_center_lat, entire_spatial_DB, radius_in_km,
+                     nb_radius_points=100){
+  radius_points <- get_circle_points(data_center_long,  data_center_lat, radius_in_km, nb_radius_points)
+  
+  min_longitude <- min(radius_points$LONGITUDE)
+  max_longitude <- max(radius_points$LONGITUDE)
+  min_latitude <- min(radius_points$LATITUDE)
+  max_latitude <- max(radius_points$LATITUDE)
+  entire_spatial_DB_int <- subset(entire_spatial_DB, LONGITUDE >= min_longitude & LONGITUDE <= max_longitude & LATITUDE >= min_latitude & LATITUDE <= max_latitude)
+  
+  # Appliquer de façon récursive la fonction sur toutes les observations d’intérêt
+  res <- data.frame(apply (entire_spatial_DB_int, 1,in_the_cercle_v2, circle_point = radius_points))
+  return(list(res, entire_spatial_DB_int,radius_points))
+}
+
+#Q6
+testRes <- merge_all(-73.6206714,45.50333 , merged, 1.5, 100)
+plot(testRes[[2]]$LONGITUDE, testRes[[2]]$LATITUDE, col = as.factor(testRes[[1]][,1]))
